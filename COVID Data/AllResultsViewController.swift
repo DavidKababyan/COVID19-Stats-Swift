@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AllResultsViewController: UIViewController {
     
@@ -23,13 +24,44 @@ class AllResultsViewController: UIViewController {
     @IBOutlet weak var searchOptionsView: UIView!
     @IBOutlet weak var searchTextField: UITextField!
     
+    @IBOutlet weak var cardBackgroundView: UIView!
+    @IBOutlet weak var cardBackgroundView1: UIView!
+    @IBOutlet weak var cardBackgroundView2: UIView!
+    @IBOutlet weak var cardBackgroundView3: UIView!
+    @IBOutlet weak var cardBackgroundView4: UIView!
+    @IBOutlet weak var cardBackgroundView6: UIView!
+    
+    
     //MARK: - Vars
-    var allCountries: [CountryData] = []
-    var filteredCountries: [CountryData] = []
+    var allCountries: [Country] = []
+    var filteredCountries: [Country] = []
 
     var sortPopupView: SortPopUpMenuController!
     var isSortPopUpVisible = false
     var isSearching = false
+    
+    var totalStats: [Total] = []
+    var lastFetchDate: Date?
+
+    let titleLabel: UILabel = {
+        
+        let title = UILabel(frame: CGRect(x: 0, y: 0, width: 140, height: 15))
+        title.textAlignment = .center
+        title.font = UIFont.systemFont(ofSize: 20, weight: .regular)
+        title.textColor = .white
+            
+            
+        return title
+    }()
+    let subTitleLabel: UILabel = {
+        
+        let subTitle = UILabel(frame: CGRect(x: 0, y: 20, width: 140, height: 15))
+        subTitle.textAlignment = .center
+        subTitle.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        subTitle.textColor = .white
+
+        return subTitle
+    }()
 
     
     //MARK: - View Lifecycle
@@ -37,13 +69,25 @@ class AllResultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        fetchCountryData()
-        fetchTotalData()
+        checkForLastFetchDate()
+
+        fetchTotalStatsFromCD()
+        fetchCountryStatsFromCD()
+
+        if shouldFetchNew() {
+
+            fetchTotalDataFromAPI()
+            fetchCountryDataFromAPI()
+        }
+                
         setupPopUpView()
-        
+
         tableView.tableFooterView = UIView()
         
         searchTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: UIControl.Event.editingChanged)
+        setupCustomTitleView()
+        updateTitleLabels()
+        roundViewEdges()
     }
     
     
@@ -80,25 +124,115 @@ class AllResultsViewController: UIViewController {
         tableView.reloadData()
     }
     
-    //MARK: - FetchData
-    
-    private func fetchTotalData() {
-        CovidFetchRequest().getCurrentTotal { (totalData) in
+    //MARK: - Fetch from CD
+    private func fetchTotalStatsFromCD() {
+        
+        let context = AppDelegate.context
+
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Total")
+        fetchRequest.sortDescriptors = []
+        
+
+        do {
+            self.totalStats = try context.fetch(fetchRequest) as! [Total]
             
-            self.updateTotalValues(totalData)
+        } catch {
+            print("Failed to fetch total")
+        }
+        
+
+        if totalStats.count > 0 {
+            updateTotalValues(self.totalStats.first!)
         }
     }
     
-    private func fetchCountryData() {
+    private func fetchCountryStatsFromCD() {
         
-        CovidFetchRequest().getAllCountries { (allCountries) in
+        let context = AppDelegate.context
+
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Country")
+        fetchRequest.sortDescriptors = []
+        
+
+        do {
+            self.allCountries = try context.fetch(fetchRequest) as! [Country]
             
-            self.allCountries = allCountries
-            self.updateData()
+        } catch {
+            print("Failed to fetch country")
         }
+        
+
+        if allCountries.count > 0 {
+            sortData()
+            tableView.reloadData()
+        } else {
+            print("no countries in db")
+        }
+    }
+
+
+    
+    //MARK: - FetchData From API
+    
+    private func fetchTotalDataFromAPI() {
+        
+        CovidFetchRequest().getCurrentTotal { (totalData) in
+            
+            if totalData != nil {
+                
+                var totalD: Total!
+                
+                if self.totalStats.count > 0 {
+
+                    totalD = self.totalStats.first!
+                } else {
+
+                    let context = AppDelegate.context
+                    totalD = Total(context: context)
+                    
+                }
+                
+                totalD.confirmed = totalData!.confirmed.formatNumber()
+                totalD.critical = totalData!.critical.formatNumber()
+                totalD.deaths = totalData!.deaths.formatNumber()
+                totalD.recovered = totalData!.recovered.formatNumber()
+                totalD.recoveredRate = totalData!.recoveredRate
+                totalD.fatalityRate = totalData!.fatalityRate
+                
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+                
+                self.updateTotalValues(totalD)
+            }
+            
+        }
+    }
+    
+    private func fetchCountryDataFromAPI() {
+        
+        CovidFetchRequest().getAllCountries { (_allCountries) in
+            
+            if _allCountries.count > 0 {
+                
+                self.deleteAllCountriesFromCD()
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            }
+
+            self.allCountries = _allCountries
+            self.sortData()
+        }
+        
     }
     
     //MARK: - Setup
+
+    private func setupCustomTitleView() {
+        
+        let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(subTitleLabel)
+        
+        self.navigationItem.titleView = containerView
+    }
 
     private func setupPopUpView() {
         
@@ -106,7 +240,7 @@ class AllResultsViewController: UIViewController {
         sortPopupView.containerView.layer.cornerRadius = 20
         sortPopupView.delegate = self
         sortPopupView.frame = CGRect(x: 0, y: self.view.frame.height
-            + 90, width: self.view.frame.width, height: 200)
+            + 90, width: self.view.frame.width, height: 250)
                 
         let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         keyWindow!.addSubview(sortPopupView)
@@ -122,23 +256,41 @@ class AllResultsViewController: UIViewController {
         }
     }
     
-    //MARK: - Update UI
-
-    private func updateTotalValues(_ totalData: TotalData?) {
-        
-        if totalData != nil {
-            confirmedLabel.text = totalData!.confirmed.formatNumber()
-            criticalLabel.text = totalData!.critical.formatNumber()
-
-            deathLabel.text = totalData!.deaths.formatNumber()
-            deathPercentLabel.text = String(format: "%.2f", totalData!.fatalityRate)
-            
-            recoveredLabel.text = totalData!.recovered.formatNumber()
-            recoveredPercentLabel.text = String(format: "%.2f", totalData!.recoveredRate) 
-        }
+    private func roundViewEdges() {
+        cardBackgroundView.layer.cornerRadius = 8
+        cardBackgroundView1.layer.cornerRadius = 8
+        cardBackgroundView2.layer.cornerRadius = 8
+        cardBackgroundView3.layer.cornerRadius = 8
+        cardBackgroundView4.layer.cornerRadius = 8
+        cardBackgroundView6.layer.cornerRadius = 8
     }
     
-    private func updateData(sortBy: String = "") {
+    //MARK: - Update UI
+    
+    private func updateTitleLabels() {
+        
+        titleLabel.text = "Recent Data"
+        if lastFetchDate != nil {
+            subTitleLabel.text = "Updated at " + lastFetchDate!.timeString()
+        } else {
+            subTitleLabel.text = "Updated at " + Date().timeString()
+        }
+    }
+
+
+    private func updateTotalValues(_ totalData: Total) {
+        
+            confirmedLabel.text = totalData.confirmed
+            criticalLabel.text = totalData.critical
+
+            deathLabel.text = totalData.deaths
+            deathPercentLabel.text = String(format: "%.2f", totalData.fatalityRate)
+            
+            recoveredLabel.text = totalData.recovered
+            recoveredPercentLabel.text = String(format: "%.2f", totalData.recoveredRate)
+    }
+    
+    private func sortData(sortBy: String = "") {
         
         switch sortBy {
         case "recovered":
@@ -146,6 +298,11 @@ class AllResultsViewController: UIViewController {
 
         case "death":
             self.allCountries = allCountries.sorted(by: { $0.deaths > $1.deaths })
+        case "recoveryRate":
+            self.allCountries = allCountries.sorted(by: { $0.recoveryRate > $1.recoveryRate })
+
+        case "deathRate":
+            self.allCountries = allCountries.sorted(by: { $0.fatalityRate > $1.fatalityRate })
 
         default:
             self.allCountries = allCountries.sorted(by: { $0.confirmed > $1.confirmed })
@@ -187,6 +344,34 @@ class AllResultsViewController: UIViewController {
         }
         
     }
+    
+    private func deleteAllCountriesFromCD() {
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Country")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try AppDelegate.context.execute(deleteRequest)
+            
+        } catch let error as NSError {
+            print("error, couldn't empty countries ", error)
+        }
+
+    }
+
+    private func shouldFetchNew() -> Bool {
+        
+        if allCountries.count == 0 || lastFetchDate == nil {
+            return true
+        } else {
+            if let timePass = Calendar.current.dateComponents([.hour], from: lastFetchDate!, to: Date()).hour, timePass > 5 {
+                UserDefaults.standard.set(Date(), forKey: kLASTFETCHTIME)
+                return true
+            } else {
+                return false
+            }
+        }
+    }
 
     
     //MARK: - Animations
@@ -213,17 +398,29 @@ class AllResultsViewController: UIViewController {
     }
 
 
-    //MARK: Search
+    //MARK: - Search
      
      func filteredContentForSearchText(searchText: String) {
          
          filteredCountries = allCountries.filter({ (country) -> Bool in
              
-             return country.country.lowercased().contains(searchText.lowercased())
+             return country.country!.lowercased().contains(searchText.lowercased())
          })
          
          tableView.reloadData()
      }
+    
+    //MARK: - UserDefaults
+    private func checkForLastFetchDate() {
+        
+        lastFetchDate = UserDefaults.standard.object(forKey: kLASTFETCHTIME) as? Date
+        
+        if lastFetchDate == nil {
+            UserDefaults.standard.set(Date(), forKey: kLASTFETCHTIME)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
 
 }
 
@@ -231,6 +428,7 @@ extension AllResultsViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return isSearching ? filteredCountries.count : allCountries.count
     }
     
@@ -252,7 +450,7 @@ extension AllResultsViewController: UITableViewDataSource, UITableViewDelegate {
         
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(identifier: "countryDetailView") as! CountryDetailViewController
         
-        vc.countryData = isSearching ? filteredCountries[indexPath.row] : allCountries[indexPath.row]
+        vc.country = isSearching ? filteredCountries[indexPath.row] : allCountries[indexPath.row]
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
@@ -262,22 +460,33 @@ extension AllResultsViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension AllResultsViewController : SortPopupMenuControllerDelegate {
     
-    func recoveredButtonPressed() {
-        updateData(sortBy: "recovered")
+    func deathRateButtonPressed() {
+        sortData(sortBy: "deathRate")
         hideSortPopUpView()
         isSortPopUpVisible.toggle()
-
+    }
+    
+    func recoveryRateButtonPressed() {
+        sortData(sortBy: "recoveryRate")
+        hideSortPopUpView()
+        isSortPopUpVisible.toggle()
+    }
+    
+    
+    func recoveredButtonPressed() {
+        sortData(sortBy: "recovered")
+        hideSortPopUpView()
+        isSortPopUpVisible.toggle()
     }
     
     func confirmedButtonPressed() {
-        updateData()
+        sortData()
         hideSortPopUpView()
         isSortPopUpVisible.toggle()
-
     }
     
     func deathButtonPressed() {
-        updateData(sortBy: "death")
+        sortData(sortBy: "death")
         hideSortPopUpView()
         isSortPopUpVisible.toggle()
 

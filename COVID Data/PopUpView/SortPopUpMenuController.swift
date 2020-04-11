@@ -13,6 +13,9 @@ protocol SortPopupMenuControllerDelegate {
     func recoveredButtonPressed()
     func confirmedButtonPressed()
     func deathButtonPressed()
+    func deathRateButtonPressed()
+    func recoveryRateButtonPressed()
+
     func sortBackgroundTapped()
 
 }
@@ -76,7 +79,16 @@ class SortPopUpMenuController: UIView {
         
         delegate?.recoveredButtonPressed()
     }
-        
+    
+    @IBAction func deathRatePressed(_ sender: Any) {
+        delegate?.deathRateButtonPressed()
+    }
+    
+    
+    @IBAction func recoveryRatePressed(_ sender: Any) {
+        delegate?.recoveryRateButtonPressed()
+    }
+    
 }
 
 

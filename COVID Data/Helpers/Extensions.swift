@@ -11,9 +11,9 @@ import UIKit
 
 extension Date {
  
-    func stringDate() -> String {
+    func timeString() -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm dd/MMMM/yyyy"
+        dateFormatter.dateFormat = "HH:mm"
         return dateFormatter.string(from: self)
     }
     
@@ -34,6 +34,17 @@ extension Date {
 }
 
 
+extension Int64 {
+    
+    func formatNumber() -> String {
+        let formater = NumberFormatter()
+        formater.groupingSeparator = ","
+        formater.numberStyle = .decimal
+        return formater.string(from: NSNumber(value: self))!
+    }
+
+}
+
 extension Int {
     
     func formatNumber() -> String {
@@ -44,6 +55,7 @@ extension Int {
     }
 
 }
+
 
 
 extension UIView {

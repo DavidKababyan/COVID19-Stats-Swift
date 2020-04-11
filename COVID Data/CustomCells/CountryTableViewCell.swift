@@ -26,7 +26,7 @@ class CountryTableViewCell: UITableViewCell {
     }
 
     
-    func setupCell(_ countryData: CountryData) {
+    func setupCell(_ countryData: Country) {
         countryLabel.adjustsFontSizeToFitWidth = true
         countryLabel.minimumScaleFactor = 0.7
 

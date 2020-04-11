@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2Gz-Bp-89f">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PcY-JJ-qdg">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--All Countries-->
+        <!--All Results View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="AllResultsViewController" customModule="COVID_Data" customModuleProvider="target" sceneMemberID="viewController">
@@ -413,7 +413,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="All Countries" id="tRw-aL-J4q">
+                    <navigationItem key="navigationItem" id="tRw-aL-J4q">
                         <rightBarButtonItems>
                             <barButtonItem image="sort" id="1HH-5Y-4BW">
                                 <connections>
@@ -428,6 +428,12 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="cardBackgroundView" destination="qB7-wL-fLp" id="Pmc-A1-5Af"/>
+                        <outlet property="cardBackgroundView1" destination="xTZ-hE-Rwh" id="2gs-Z1-Xtx"/>
+                        <outlet property="cardBackgroundView2" destination="Qlf-Bk-Rjg" id="oAW-U6-Lgd"/>
+                        <outlet property="cardBackgroundView3" destination="7rr-HF-jYj" id="Fdt-1B-KYo"/>
+                        <outlet property="cardBackgroundView4" destination="l9o-VE-cbw" id="qo9-dF-4Y7"/>
+                        <outlet property="cardBackgroundView6" destination="XdZ-TT-Soi" id="hdh-ED-NqV"/>
                         <outlet property="confirmedLabel" destination="EYa-WS-M1b" id="UYK-IQ-dNW"/>
                         <outlet property="criticalLabel" destination="4r7-IB-gmj" id="Jft-fP-kKX"/>
                         <outlet property="deathLabel" destination="c0A-BP-Mmb" id="eG1-Ce-l5E"/>
@@ -532,10 +538,11 @@
             </objects>
             <point key="canvasLocation" x="1944.8" y="135.38230884557723"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Latest-->
         <scene sceneID="ja8-f2-D66">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="2Gz-Bp-89f" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Latest" image="clock" catalog="system" id="2Ze-Za-KS1"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3s6-tn-ZDd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -550,8 +557,77 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="136.60714285714286"/>
         </scene>
+        <!--World Map-->
+        <scene sceneID="gIT-h5-s1l">
+            <objects>
+                <viewController id="VhL-qO-xk5" customClass="MapViewController" customModule="COVID_Data" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pht-1Q-i5O">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="JOU-N9-mUp">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="JOU-N9-mUp" firstAttribute="top" secondItem="50u-yX-riL" secondAttribute="top" id="6Ar-Cy-LLs"/>
+                            <constraint firstItem="JOU-N9-mUp" firstAttribute="leading" secondItem="50u-yX-riL" secondAttribute="leading" id="C07-Mu-BaJ"/>
+                            <constraint firstAttribute="bottom" secondItem="JOU-N9-mUp" secondAttribute="bottom" id="KjA-UL-XAG"/>
+                            <constraint firstItem="JOU-N9-mUp" firstAttribute="trailing" secondItem="50u-yX-riL" secondAttribute="trailing" id="uvl-im-jol"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="50u-yX-riL"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="World Map" id="z4A-0Q-YvX"/>
+                    <connections>
+                        <outlet property="mapView" destination="JOU-N9-mUp" id="xq1-eF-kN8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x3M-RR-69a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1040.8" y="879.31034482758628"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="SOF-Rd-Ee5">
+            <objects>
+                <tabBarController id="PcY-JJ-qdg" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mCW-6V-ZF4">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="2Gz-Bp-89f" kind="relationship" relationship="viewControllers" id="Wye-7j-2xr"/>
+                        <segue destination="O43-3r-LGf" kind="relationship" relationship="viewControllers" id="kVi-hS-XsM"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1zM-S1-uT9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-878" y="1054"/>
+        </scene>
+        <!--Map-->
+        <scene sceneID="EOz-1r-sxk">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="O43-3r-LGf" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Map" image="map" catalog="system" id="Dg4-9r-Wq9"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hZG-8S-PH6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="VhL-qO-xk5" kind="relationship" relationship="rootViewController" id="OUv-sp-WWq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MFH-Nf-4Vr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="128.80000000000001" y="880.20989505247383"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="clock" catalog="system" width="128" height="121"/>
+        <image name="map" catalog="system" width="128" height="113"/>
         <image name="sort" width="26" height="19"/>
         <namedColor name="accountBackgroundColor">
             <color red="0.98000001907348633" green="0.98100000619888306" blue="0.96899998188018799" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
