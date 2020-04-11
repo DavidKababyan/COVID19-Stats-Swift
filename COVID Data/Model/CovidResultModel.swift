@@ -23,6 +23,38 @@ struct TotalData {
         return (100.00 * Double(recovered)) / Double(confirmed)
     }
 }
+
+
+struct WHOAdvice: Decodable, Identifiable {
+    
+    let id = UUID()
+    
+    let title: String
+    let subtitle: String
+    let basics: [WHOData]
+    let topics: [WHOTopic]
+    
+}
+
+struct WHOTopic: Decodable, Identifiable {
+    
+    let id = UUID()
+    
+    let title: String
+    let questions: [WHOData]
+}
+
+
+struct WHOData: Decodable, Identifiable {
+    
+    let id = UUID()
+    
+    let title: String
+    let subtitle: String
+}
+
+
+
 //
 //struct CountryData {
 //    

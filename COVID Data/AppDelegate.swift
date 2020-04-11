@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         UINavigationBar.appearance().barTintColor = UIColor(named: "navigationBackground")
@@ -33,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITabBar.appearance().barTintColor = UIColor(named: "tabBarBackground")
         UITabBar.appearance().tintColor = UIColor.white
         UITabBar.appearance().unselectedItemTintColor = UIColor(named: "barUnselectedTintColor")
+
 
         return true
     }
@@ -84,6 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+
+    
 
 
 }

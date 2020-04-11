@@ -8,17 +8,15 @@
 
 import UIKit
 import MapKit
-import CoreLocation
 import CoreData
 
 class MapViewController: UIViewController {
 
     //MARK: - IBOutlets
-    @IBOutlet weak var mapView: MKMapView!
+    var mapView: MKMapView!
     
     //MARK: - Vars
 
-    let locationManager = CLLocationManager()
     var allCountries: [Country] = []
     var selectedAnnotation: MKPointAnnotation?
 
@@ -33,33 +31,18 @@ class MapViewController: UIViewController {
     
 
     private func setupMapView() {
+        mapView = MKMapView()
+        mapView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        self.view.addSubview(mapView)
         
-        self.locationManager.requestWhenInUseAuthorization()
-
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-        }
-
         mapView.delegate = self
         mapView.mapType = .standard
         mapView.isZoomEnabled = true
         mapView.isScrollEnabled = true
-        
-        if locationManager.location != nil {
-            let locValue: CLLocationCoordinate2D = locationManager.location!.coordinate
+        mapView.mapType = MKMapType.standard
 
-            mapView.mapType = MKMapType.standard
-            
-            let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-            let region = MKCoordinateRegion(center: locValue, span: span)
-            mapView.setRegion(region, animated: true)
-
-            if let coordinate = mapView.userLocation.location?.coordinate{
-                mapView.setCenter(coordinate, animated: true)
-            }
-
+        if let coordinate = mapView.userLocation.location?.coordinate{
+            mapView.setCenter(coordinate, animated: true)
         }
     }
     

@@ -361,11 +361,13 @@ class AllResultsViewController: UIViewController {
 
     private func shouldFetchNew() -> Bool {
         
+        //fetch every 5 min
         if allCountries.count == 0 || lastFetchDate == nil {
             return true
         } else {
-            if let timePass = Calendar.current.dateComponents([.hour], from: lastFetchDate!, to: Date()).hour, timePass > 5 {
+            if let timePass = Calendar.current.dateComponents([.minute], from: lastFetchDate!, to: Date()).minute, timePass > 5 {
                 UserDefaults.standard.set(Date(), forKey: kLASTFETCHTIME)
+                updateTitleLabels()
                 return true
             } else {
                 return false

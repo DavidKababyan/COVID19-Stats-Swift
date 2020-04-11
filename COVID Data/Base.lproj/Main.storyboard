@@ -11,7 +11,7 @@
         <!--All Results View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="AllResultsViewController" customModule="COVID_Data" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="AllResultsViewController" customModule="COVID_Stats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="279" width="375" height="388"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="mG8-bE-mrf" customClass="CountryTableViewCell" customModule="COVID_Data" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="mG8-bE-mrf" customClass="CountryTableViewCell" customModule="COVID_Stats" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mG8-bE-mrf" id="rpf-kn-Gd5">
@@ -453,7 +453,7 @@
         <!--Country Detail View Controller-->
         <scene sceneID="Iv5-90-7zn">
             <objects>
-                <viewController storyboardIdentifier="countryDetailView" id="d0B-wA-c23" customClass="CountryDetailViewController" customModule="COVID_Data" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="countryDetailView" id="d0B-wA-c23" customClass="CountryDetailViewController" customModule="COVID_Stats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wr5-c9-cv8">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -466,7 +466,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="separatorColor" name="accountBackgroundColor"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="TnK-tv-56F" customClass="CountryDetailTableViewCell" customModule="COVID_Data" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="TnK-tv-56F" customClass="CountryDetailTableViewCell" customModule="COVID_Stats" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="319" height="43.5"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TnK-tv-56F" id="7lZ-iY-XcS">
@@ -560,28 +560,14 @@
         <!--World Map-->
         <scene sceneID="gIT-h5-s1l">
             <objects>
-                <viewController id="VhL-qO-xk5" customClass="MapViewController" customModule="COVID_Data" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VhL-qO-xk5" customClass="MapViewController" customModule="COVID_Stats" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="pht-1Q-i5O">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="JOU-N9-mUp">
-                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
-                            </mapView>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="JOU-N9-mUp" firstAttribute="top" secondItem="50u-yX-riL" secondAttribute="top" id="6Ar-Cy-LLs"/>
-                            <constraint firstItem="JOU-N9-mUp" firstAttribute="leading" secondItem="50u-yX-riL" secondAttribute="leading" id="C07-Mu-BaJ"/>
-                            <constraint firstAttribute="bottom" secondItem="JOU-N9-mUp" secondAttribute="bottom" id="KjA-UL-XAG"/>
-                            <constraint firstItem="JOU-N9-mUp" firstAttribute="trailing" secondItem="50u-yX-riL" secondAttribute="trailing" id="uvl-im-jol"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="50u-yX-riL"/>
                     </view>
                     <navigationItem key="navigationItem" title="World Map" id="z4A-0Q-YvX"/>
-                    <connections>
-                        <outlet property="mapView" destination="JOU-N9-mUp" id="xq1-eF-kN8"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x3M-RR-69a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -623,6 +609,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MFH-Nf-4Vr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="128.80000000000001" y="880.20989505247383"/>
+        </scene>
+        <!--Advise-->
+        <scene sceneID="F06-Tp-fL3">
+            <objects>
+                <viewController id="w8q-bv-bSf" customClass="AdviseViewController" customModule="COVID_Stats" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Y92-OV-r0Z">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="K9P-hp-wgW"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Advise" id="S9j-WQ-2zI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eGl-Dr-CRd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130" y="1588"/>
         </scene>
     </scenes>
     <resources>
