@@ -66,19 +66,24 @@ class AllResultsViewController: UIViewController {
     
     //MARK: - View Lifecycle
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         checkForLastFetchDate()
-
+        
         fetchTotalStatsFromCD()
         fetchCountryStatsFromCD()
-
+        
         if shouldFetchNew() {
-
             fetchTotalDataFromAPI()
             fetchCountryDataFromAPI()
         }
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
                 
         setupPopUpView()
 
